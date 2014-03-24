@@ -42,29 +42,37 @@ function set_parameters {
       -r)
         NUM_REDUCERS=$2 ;
         shift 2;;
+      -l)
+        LOCAL=true ;
+        shift ;;
       --) shift ; break ;;
       *) echo "Internal error: $1" ; exit 1 ;;
     esac
   done
 
+  OUTPUT_FILE="/mnt/telemetry/$JOB_NAME_$FILTER_NAME_results.out"
+
   echo "JOB_NAME = $JOB_NAME"
   echo "FILTER_NAME = $FILTER_NAME"
   echo "NUM_MAPPERS = $NUM_MAPPERS"
   echo "NUM_REDUCERS = $NUM_REDUCERS"
+  echo "LOCAL = $LOCAL"
 }
 
 function run_job {
   printf "\n------> Starting job\n"
   cd ~/telemetry-server
   python -m mapreduce.job ../fennec-telemetry/jobs/$JOB_NAME.py \
-    --input-filter filters/$FILTER_NAME.json \
+    --input-filter ../fennec-telemetry/filters/$FILTER_NAME.json \
     --num-mappers $NUM_MAPPERS \
     --num-reducers $NUM_REDUCERS \
     --data-dir /mnt/telemetry/work \
     --work-dir /mnt/telemetry/work \
-    --output /mnt/telemetry/$JOB_NAME_$FILTER_NAME_results.out \
+    --output $OUTPUT_FILE \
     --bucket "telemetry-published-v1"
-  cat /mnt/telemetry/$JOB_NAME_$FILTER_NAME_results.out
+
+  printf "\n------> Results in $OUTPUT_FILE\n"
+  cat $OUTPUT_FILE
 }
 
 set_parameters $@ &&
