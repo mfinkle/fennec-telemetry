@@ -14,6 +14,7 @@ function show_usage {
   printf "Options:\n"
   printf "\t\t -m: number of mappers (defaults to $DEFAULT_NUM_MAPPERS)\n"
   printf "\t\t -n: number of reducers (defaults to $DEFAULT_NUM_REDUCERS)\n"
+  printf "\t\t -l: use already downloaded data (for when running subsequent jobs)"
 }
 
 function set_parameters {
@@ -24,8 +25,9 @@ function set_parameters {
 
   NUM_MAPPERS=$DEFAULT_NUM_MAPPERS
   NUM_REDUCERS=$DEFAULT_NUM_REDUCERS
+  LOCAL=false
 
-  TEMP=`getopt j:f:m::r:: $@`
+  TEMP=`getopt j:f:m::r::l $@`
   eval set -- "$TEMP"
 
   while true ; do
@@ -62,14 +64,28 @@ function set_parameters {
 function run_job {
   printf "\n------> Starting job\n"
   cd ~/telemetry-server
-  python -m mapreduce.job ../fennec-telemetry/jobs/$JOB_NAME.py \
-    --input-filter ../fennec-telemetry/filters/$FILTER_NAME.json \
-    --num-mappers $NUM_MAPPERS \
-    --num-reducers $NUM_REDUCERS \
-    --data-dir /mnt/telemetry/work \
-    --work-dir /mnt/telemetry/work \
-    --output $OUTPUT_FILE \
-    --bucket "telemetry-published-v1"
+
+  if [ $LOCAL ]; then
+    python -m mapreduce.job ../fennec-telemetry/jobs/$JOB_NAME.py \
+      --input-filter ../fennec-telemetry/filters/$FILTER_NAME.json \
+      --num-mappers $NUM_MAPPERS \
+      --num-reducers $NUM_REDUCERS \
+      --data-dir /mnt/telemetry/work/cache \
+      --work-dir /mnt/telemetry/work \
+      --output $OUTPUT_FILE \
+      --bucket "telemetry-published-v1" \
+      --local-only
+  else
+    python -m mapreduce.job ../fennec-telemetry/jobs/$JOB_NAME.py \
+      --input-filter ../fennec-telemetry/filters/$FILTER_NAME.json \
+      --num-mappers $NUM_MAPPERS \
+      --num-reducers $NUM_REDUCERS \
+      --data-dir /mnt/telemetry/work \
+      --work-dir /mnt/telemetry/work \
+      --output $OUTPUT_FILE \
+      --bucket "telemetry-published-v1"
+  fi
+
 
   printf "\n------> Results in $OUTPUT_FILE\n"
   cat $OUTPUT_FILE
