@@ -15,14 +15,10 @@ function show_usage {
   printf "\t\t -m: number of mappers (defaults to $DEFAULT_NUM_MAPPERS)\n"
   printf "\t\t -n: number of reducers (defaults to $DEFAULT_NUM_REDUCERS)\n"
   printf "\t\t -l: use already downloaded data (for when running subsequent jobs)"
+  exit 1
 }
 
 function set_parameters {
-  if (( $# < 4 )); then
-    show_usage
-    exit 1
-  fi
-
   NUM_MAPPERS=$DEFAULT_NUM_MAPPERS
   NUM_REDUCERS=$DEFAULT_NUM_REDUCERS
   LOCAL=false
@@ -51,6 +47,10 @@ function set_parameters {
       *) echo "Internal error: $1" ; exit 1 ;;
     esac
   done
+
+  if [ ! -n "$JOB_NAME" -o ! -n "$FILTER_NAME" ]; then
+    show_usage
+  fi
 
   OUTPUT_FILE="/mnt/telemetry/$JOB_NAME_$FILTER_NAME_results.out"
 
