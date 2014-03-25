@@ -18,6 +18,7 @@ function show_usage {
   printf "\t -m,  number of mappers (defaults to $DEFAULT_NUM_MAPPERS)\n"
   printf "\t -r,  number of reducers (defaults to $DEFAULT_NUM_REDUCERS)\n"
   printf "\t -p,  force to redownload data from S3 (takes longer)\n"
+  printf "\t -s,  show the command to be run, without actually running\n"
   exit 1
 }
 
@@ -35,33 +36,37 @@ function set_defaults {
 function set_parameters {
   set_defaults
 
-  TEMP=`getopt j:f:m::r::ph $@`
+  TEMP=`getopt j:f:m::r::phs $@`
   eval set -- "$TEMP"
 
   while true ; do
     case "$1" in
-      -j|--job)
+      -j)
         JOB_NAME=$2
         shift 2
         ;;
-      -f|--filter)
+      -f)
         FILTER_NAME=$2
         shift 2
         ;;
-      -m|--mappers)
+      -m)
         NUM_MAPPERS=$2
         shift 2
         ;;
-      -r|--reducers)
+      -r)
         NUM_REDUCERS=$2
         shift 2
         ;;
-      -p|--pull-force)
+      -p)
         PULL=""
         shift
         ;;
-      -h|--help)
+      -h)
         show_usage
+        ;;
+      -s)
+        SIMULATE=true
+        shift
         ;;
       --) shift ; break ;;
       *) echo "Internal error: $1" ; exit 1 ;;
@@ -72,7 +77,7 @@ function set_parameters {
     show_usage
   fi
 
-  OUTPUT_FILE="/mnt/telemetry/$JOB_NAME_$FILTER_NAME_results.out"
+  OUTPUT_FILE="/mnt/telemetry/"$JOB_NAME"_"$FILTER_NAME"_results.out"
 
   echo "JOB_NAME = $JOB_NAME"
   echo "FILTER_NAME = $FILTER_NAME"
@@ -82,23 +87,28 @@ function set_parameters {
 }
 
 function run_job {
-  printf "\n------> Starting job\n"
-  cd ~/telemetry-server
-
-  python -m mapreduce.job ../fennec-telemetry/jobs/$JOB_NAME.py \
+  COMMAND="python -m mapreduce.job ../fennec-telemetry/jobs/$JOB_NAME.py \
     --input-filter ../fennec-telemetry/filters/$FILTER_NAME.json \
     --num-mappers $NUM_MAPPERS \
     --num-reducers $NUM_REDUCERS \
-    --data-dir /mnt/telemetry/work/cache \
+    --data-dir /mnt/telemetry/work \
     --work-dir /mnt/telemetry/work \
     --output $OUTPUT_FILE \
-    --bucket "telemetry-published-v1" \
-    $PULL
+    --bucket \"telemetry-published-v1\" \
+    $PULL"
 
-  printf "\n------> Results in $OUTPUT_FILE\n"
-  cat $OUTPUT_FILE
+  if [ $SIMULATE ]; then
+    printf "\n------> Simluating job\n"
+    echo $COMMAND
+  else
+    printf "\n------> Starting job\n"
+    setup_directories
+    cd ~/telemetry-server
+    eval $COMMAND
+    printf "\n------> Results in $OUTPUT_FILE\n"
+    cat $OUTPUT_FILE
+  fi
 }
 
 set_parameters $@ &&
-setup_directories &&
 run_job
