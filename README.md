@@ -20,7 +20,12 @@ See all options: `./fennec-telemetry/run.sh -h`
 
 Make a pull request if you would like to add a new job or filter!
 
+## MapReduce Jobs
+
+You may find this [base job](http://github.com/gerfuls/fennec-telemetry/blob/master/jobs/base_job.py)
+helpful for creating new jobs that process the event / session stream from Fennec's UI telemetry.
+
 ## Useful Links
-- [AustralisTelemetry](https://github.com/bwinton/AustralisTelemetry)
+- [AustralisTelemetry](http://github.com/bwinton/AustralisTelemetry)
 - [mreid's blog](http://mreid-moz.github.io/blog/2013/11/06/current-state-of-telemetry-analysis/)
-- [MapReduce Docs](https://github.com/mozilla/telemetry-server/blob/master/docs/MapReduce.md)
+- [MapReduce Docs](http://github.com/mozilla/telemetry-server/blob/master/docs/MapReduce.md)
