@@ -12,10 +12,11 @@ def map(key, dimensions, value, map_context):
     map_context.write("event_count", len(ui))
 
   except Exception, e:
-    map_context.write("JSON PARSE ERROR:", e)
+    map_context.write("JSON PARSE ERROR:", str(e))
 
 def reduce(key, value, reduce_context):
   if key == "JSON PARSE ERROR:":
     for i in set(value):
       reduce_context.write(key, i)
-  reduce_context.write(key, sum(value))
+  else:
+    reduce_context.write(key, sum(value))
