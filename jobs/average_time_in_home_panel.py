@@ -23,10 +23,10 @@ def map(key, dimensions, value, map_context):
       # Write the total time per specific panel
       for name, value in homepanels.iteritems():
         if value > 0:
-          map_context.write("average time in " + name, value)
+          map_context.write("average time (secs) in " + name, value)
 
       # Write the total time in panels (Hub)
-      map_context.write("average time in homepanels (secs)", total)
+      map_context.write("average time (secs) in about:home", total)
 
   except Exception, e:
     map_context.write("JSON PARSE ERROR:", str(e))
@@ -36,8 +36,10 @@ def reduce(key, value, reduce_context):
     for error in value:
       reduce_context.write(key, error)
   else:
+    # Convert from milliseconds to seconds
+    value_secs = sum(value) / 1000
     # Calculate the average
-    reduce_context.write(key, sum(value) / len(value))
+    reduce_context.write(key, value_secs / len(value))
 
 def add_to_homepanels(homepanels, name, time):
   if not name in homepanels:
