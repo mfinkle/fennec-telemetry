@@ -27,9 +27,10 @@ Make a pull request if you would like to add a new job or filter!
 
 ## Notes
 
-- You may find this [base job](http://github.com/gerfuls/fennec-telemetry/blob/master/jobs/base_job.py)
+- You may find this [base job](jobs/base_job.py)
 helpful for creating new jobs that process the event / session stream from Fennec's UI telemetry.
-- UITelemetry didn't start reporting on nightly until 20140404 (the start date in base_filter.json).
+- UITelemetry didn't start reporting on nightly until 20140404 (the start date in the
+[base filter](filters/base_filter.json)).
 
 ## Useful Links
 - [AustralisTelemetry](http://github.com/bwinton/AustralisTelemetry)
