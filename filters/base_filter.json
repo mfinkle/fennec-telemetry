@@ -11,7 +11,7 @@
     },
     {
       "field_name": "appUpdateChannel",
-      "allowed_values": ["release"]
+      "allowed_values": ["nightly"]
     },
     {
       "field_name": "appVersion",
@@ -24,8 +24,8 @@
     {
       "field_name": "submission_date",
       "allowed_values": {
-        "min": "20140301",
-        "max": "20140302"
+        "min": "20140404",
+        "max": "20140409"
       }
     }
   ]
