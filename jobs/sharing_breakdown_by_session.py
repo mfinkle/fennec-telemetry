@@ -55,8 +55,8 @@ def concat_sessions(sessions):
     listing += " > "
   return listing
 
-def add_to_sharing(sharing, method, session):
-  identifer = method + " | " + session
+def add_to_sharing(sharing, method, sessions):
+  identifer = method + " | " + sessions
   if not identifer in sharing:
     sharing[identifer] = 0
   sharing[identifer] += 1
