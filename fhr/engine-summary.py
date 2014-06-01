@@ -15,6 +15,10 @@ engines = {}
 # control the number for rows to analyze
 rows = 0
 
+# each snapshot is a full copy of the FHR data so we need to limit to a desired
+# snapshot
+activeSnapshot = "2014-05-26"
+
 with open("search_counts.may2014") as inFile:
   for line in inFile:
     #rows += 1
@@ -26,6 +30,10 @@ with open("search_counts.may2014") as inFile:
     if len(values) < 13:
       # let's see why this line does not have enough values
       print "bad line: " + line.replace(CTRL_A, " | ")
+      continue
+
+    # only use the desired snapshot
+    if activeSnapshot <> values[0]:
       continue
 
     # parse the dates quickly since we know the format is fixed
