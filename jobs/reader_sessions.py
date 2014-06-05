@@ -11,19 +11,20 @@ def map(key, dimensions, value, map_context):
     # This will be an array of events and sessions, specified by the 'type' key in each item.
     ui = j["UIMeasurements"]
     if len(ui) > 0:
-      total = 0
-      homepanels = {}
+      total_count = 0
+      total_time = 0
 
-      # Process each homepanel session, recording the total time spent in each
+      # Process each reader session, recording the total time spent in each
       for event in ui:
-        if event["type"] == "session" and "homepanel." in event["name"]:
-          add_to_homepanels(homepanels, event["name"])
-          total += 1
+        if event["type"] == "session" and "reader." in event["name"]:
+          time = event["end"] - event["start"]
+          print "time: " + str(time)
+          total_time += (time / 1000) # convert milliseconds to seconds
+          total_count += 1
 
-      # Write the total time per specific panel
-      for name, value in homepanels.iteritems():
-        if value > 0:
-          map_context.write(name, value)
+      # Write the total time and count for reader sessions
+      map_context.write("session_duration", total_time)
+      map_context.write("session_count", total_count)
 
   except Exception, e:
     map_context.write("JSON PARSE ERROR:", str(e))
@@ -33,19 +34,10 @@ def reduce(key, value, reduce_context):
     for error in value:
       reduce_context.write(key, error)
   else:
-    value_all = sum(value)
-    reduce_context.write(key, value_all)
-
-def add_to_homepanels(homepanels, name):
-  if "4becc86b-41eb-429a-a042-88fe8b5a094e" in name:
-    name = "top_sites"
-  if "7f6d419a-cd6c-4e34-b26f-f68b1b551907" in name:
-    name = "bookmarks"
-  if "20f4549a-64ad-4c32-93e4-1dcef792733b" in name:
-    name = "reading_list"
-  if "f134bf20-11f7-4867-ab8b-e8e705d7fbe8" in name:
-    name = "history"
-
-  if not name in homepanels:
-    homepanels[name] = 0
-  homepanels[name] += 1
+    if key == "session_duration":
+      value_secs = sum(value)
+      # Calculate the average
+      reduce_context.write(key, value_secs / len(value))
+    else:
+      value_all = sum(value)
+      reduce_context.write(key, value_all)

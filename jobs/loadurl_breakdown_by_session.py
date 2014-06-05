@@ -11,15 +11,15 @@ def map(key, dimensions, value, map_context):
     # This will be an array of events and sessions, specified by the 'type' key in each item.
     ui = j["UIMeasurements"]
     if len(ui) > 0:
-      sessions = {}
+      loadurls = {}
 
       # Process each load URL event
       for event in ui:
         if event["type"] == "event" and "loadurl." in event["action"]:
-          add_to_sessions(sessions, event["method"], concat_sessions(event["sessions"]))
+          add_to_loadurls(loadurls, event["method"], concat_sessions(event["sessions"]))
 
       # Write the count for each loadurl situation
-      for name, value in sessions.iteritems():
+      for name, value in loadurls.iteritems():
         if value > 0:
           map_context.write(name, value)
 
@@ -55,8 +55,8 @@ def concat_sessions(sessions):
     listing += " > "
   return listing
 
-def add_to_sessions(sessions, method, session):
-  identifer = method + " | " + session
-  if not identifer in sessions:
-    sessions[identifer] = 0
-  sessions[identifer] += 1
+def add_to_loadurls(loadurls, method, sessions):
+  identifer = method + " | " + sessions
+  if not identifer in loadurls:
+    loadurls[identifer] = 0
+  loadurls[identifer] += 1
