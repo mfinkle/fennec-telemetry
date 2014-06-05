@@ -11,15 +11,15 @@ def map(key, dimensions, value, map_context):
     # This will be an array of events and sessions, specified by the 'type' key in each item.
     ui = j["UIMeasurements"]
     if len(ui) > 0:
-      sugestions = {}
+      suggestions = {}
 
       # Process each action event
       for event in ui:
-        if event["type"] == "event" and "loadurl." in event["action"] and "suggestion" in event["method"]:
-          add_to_suggestions(sugestions, event["extras"])
+        if event["type"] == "event" and "loadurl." in event["action"] and "suggestion" in event["method"] and "extras" in event:
+          add_to_suggestions(suggestions, event["extras"])
 
       # Write the count for each action
-      for name, value in sugestions.iteritems():
+      for name, value in suggestions.iteritems():
         if value > 0:
           map_context.write(name, value)
 
