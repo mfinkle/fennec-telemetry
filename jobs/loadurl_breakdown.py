@@ -56,6 +56,8 @@ def concat_sessions(sessions):
   return listing
 
 def add_to_methods(methods, method):
+  if not method:
+    method = "<empty>"
   identifer = method
   if not identifer in methods:
     methods[identifer] = 0
