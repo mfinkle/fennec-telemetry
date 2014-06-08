@@ -1,6 +1,25 @@
-import json
+# -*- coding: utf-8 -*-
 
-def map(key, dimensions, value, map_context):
+import csv
+import io
+import simplejson as json
+import traceback
+from string import maketrans
+
+# Make sure the keys come out csv-friendly - all on one line, and surrounded by
+# double-quotes, and with any double-quotes inside doubled up per usual.
+eol_trans_table = maketrans("\r\n", "  ")
+def safe_key(pieces):
+  output = io.BytesIO()
+  writer = csv.writer(output, quoting=csv.QUOTE_MINIMAL)
+  writer.writerow(pieces)
+  # remove the trailing EOL chars:
+  return unicode(output.getvalue().strip().translate(eol_trans_table))
+
+def map(key, dimensions, value, cx):
+  [reason, appName, appUpdateChannel, appVersion, appBuildID, submission_date] = dimensions
+  core = safe_key([submission_date, appVersion, appUpdateChannel])
+
   try:
     j = json.loads(value)
     # The structure of this json object is designated in
@@ -11,32 +30,33 @@ def map(key, dimensions, value, map_context):
     # This will be an array of events and sessions, specified by the 'type' key in each item.
     ui = j["UIMeasurements"]
     if len(ui) > 0:
-      total = 0
       homepanels = {}
 
       # Process each homepanel session, recording the total time spent in each
       for event in ui:
         if event["type"] == "session" and "homepanel." in event["name"]:
-          add_to_homepanels(homepanels, event["name"])
-          total += 1
+          add_to_homepanels(core, homepanels, event["name"])
 
       # Write the total time per specific panel
       for name, value in homepanels.iteritems():
         if value > 0:
-          map_context.write(name, value)
+          cx.write(name, value)
 
   except Exception, e:
-    map_context.write("JSON PARSE ERROR:", str(e))
+    cx.write(safe_key(["ERROR", str(e), traceback.format_exc()] + dimensions), [1,0])
 
-def reduce(key, value, reduce_context):
-  if key == "JSON PARSE ERROR:":
+def setup_reduce(cx):
+    cx.field_separator = ","
+
+def reduce(key, value, cx):
+  if key.startswith("ERROR"):
     for error in value:
-      reduce_context.write(key, error)
+      cx.write(key, error)
   else:
     value_all = sum(value)
-    reduce_context.write(key, value_all)
+    cx.write(key, value_all)
 
-def add_to_homepanels(homepanels, name):
+def add_to_homepanels(key, homepanels, name):
   if "4becc86b-41eb-429a-a042-88fe8b5a094e" in name:
     name = "top_sites"
   if "7f6d419a-cd6c-4e34-b26f-f68b1b551907" in name:
@@ -46,6 +66,7 @@ def add_to_homepanels(homepanels, name):
   if "f134bf20-11f7-4867-ab8b-e8e705d7fbe8" in name:
     name = "history"
 
-  if not name in homepanels:
-    homepanels[name] = 0
-  homepanels[name] += 1
+  identifier = key + "," + name
+  if not identifier in homepanels:
+    homepanels[identifier] = 0
+  homepanels[identifier] += 1
