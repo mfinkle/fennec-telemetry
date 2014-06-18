@@ -65,7 +65,7 @@ def add_to_events(key, events, event):
   extras = "<none>"
   if "extras" in event and event["extras"]:
     extras = event["extras"]
-  identifier = key + "," + event["action"] + "," + method + "," + extras
+  identifier = key + "," + str(event["action"]) + "," + str(method) + "," + extras
   if not identifier in events:
     events[identifier] = 0
   events[identifier] += 1

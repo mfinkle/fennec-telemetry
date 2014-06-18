@@ -79,7 +79,7 @@ def concat_sessions(sessions):
   return listing
 
 def add_to_actions(key, actions, action, method, sessions):
-  identifer = key + "," + action + "," + method + "," + sessions
+  identifer = key + "," + action + "," + str(method) + "," + sessions
   if not identifer in actions:
     actions[identifer] = 0
   actions[identifer] += 1
