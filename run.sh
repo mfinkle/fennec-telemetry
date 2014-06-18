@@ -12,10 +12,6 @@ function setup_directories {
   if [ ! -d "/mnt/telemetry/work" ]; then
     mkdir -p "/mnt/telemetry/work"
   fi
-
-  if [ ! -d "/mnt/telemetry/data" ]; then
-    mkdir -p "/mnt/telemetry/data"
-  fi
 }
 
 function show_usage {
@@ -37,7 +33,7 @@ function set_defaults {
   NUM_REDUCERS=$DEFAULT_NUM_REDUCERS
   TARGET_DATE=$(date -d 'yesterday' +%Y%m%d)
 
-  if [ -d "/mnt/telemetry/data/cache/saved_session" ]; then
+  if [ -d "/mnt/telemetry/work/cache/saved_session" ]; then
     PULL="--local-only"
   else
     PULL=""
@@ -110,7 +106,7 @@ function run_job {
     --input-filter ../fennec-telemetry/filters/$FILTER_NAME.json \
     --num-mappers $NUM_MAPPERS \
     --num-reducers $NUM_REDUCERS \
-    --data-dir /mnt/telemetry/data \
+    --data-dir /mnt/telemetry/work/cache \
     --work-dir /mnt/telemetry/work \
     --output $OUTPUT_FILE \
     --bucket \"telemetry-published-v1\" \
