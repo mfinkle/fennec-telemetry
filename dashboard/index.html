@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Fennec UI Telemetry</title>
+    <link rel="stylesheet" type="text/css" href="css/pivot.css">
+    <link rel="stylesheet" href="css/jquery-ui.css">
+    <script type="text/javascript" src="js/d3.v3.min.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.10.4.min.js"></script>
+    <script type="text/javascript" src="js/jquery.csv-0.71.min.js"></script>
+    <script type="text/javascript" src="js/pivot.js"></script>
+    <script type="text/javascript" src="js/d3_renderers.js"></script>
+    <script type="text/javascript" src="js/gchart_renderers.js"></script>
+  </head>
+  <style>
+    * {font-family: Verdana;}
+    .node {
+      border: solid 1px white;
+      font: 10px sans-serif;
+      line-height: 12px;
+      overflow: hidden;
+      position: absolute;
+      text-indent: 2px;
+    }
+  </style>
+  <body>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart", "charteditor"]});
+
+      $(document).ready(function() {
+        $("#tabs").tabs();
+
+        $.ajax({ url: "data/actions.csv", dataType: "text" }).done(function(data) {
+          try {
+            var input = $.csv.toArrays(data);
+          }
+          catch(e) {
+            alert("CSV Parse error.");
+            return;
+          }
+          $("#actions-output").pivotUI(input, {
+            rows: ["Action"],
+            cols: ["Method"],
+            vals: ["Count"],
+            aggregatorName: "intSum",
+            rendererName: "Heatmap",
+            renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers)
+          });
+        })
+
+        $.ajax({ url: "data/loadurls.csv", dataType: "text" }).done(function(data) {
+          try {
+            var input = $.csv.toArrays(data);
+          }
+          catch(e) {
+            alert("CSV Parse error.");
+            return;
+          }
+          $("#loadurl-output").pivotUI(input, {
+            rows: ["Method"],
+            cols: [],
+            vals: ["Count"],
+            aggregatorName: "intSum",
+            rendererName: "Heatmap",
+            renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers)
+          });
+        })
+
+        $.ajax({ url: "data/sharing.csv", dataType: "text" }).done(function(data) {
+          try {
+            var input = $.csv.toArrays(data);
+          }
+          catch(e) {
+            alert("CSV Parse error.");
+            return;
+          }
+          $("#sharing-output").pivotUI(input, {
+            rows: ["Method"],
+            cols: [],
+            vals: ["Count"],
+            aggregatorName: "intSum",
+            rendererName: "Heatmap",
+            renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers)
+          });
+        })
+
+        $.ajax({ url: "data/firstrun.csv", dataType: "text" }).done(function(data) {
+          try {
+            var input = $.csv.toArrays(data);
+          }
+          catch(e) {
+            alert("CSV Parse error.");
+            return;
+          }
+          $("#firstrun-output").pivotUI(input, {
+            rows: ["Event"],
+            cols: [],
+            vals: ["Count"],
+            aggregatorName: "intSum",
+            rendererName: "Heatmap",
+            renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers)
+          });
+        })
+
+        $.ajax({ url: "data/homepanels.csv", dataType: "text" }).done(function(data) {
+          try {
+            var input = $.csv.toArrays(data);
+          }
+          catch(e) {
+            alert("CSV Parse error.");
+            return;
+          }
+          $("#panels-output").pivotUI(input, {
+            rows: ["Panel"],
+            cols: [],
+            vals: ["Count"],
+            aggregatorName: "intSum",
+            rendererName: "Heatmap",
+            renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers)
+          });
+        })
+
+        $.ajax({ url: "data/events.csv", dataType: "text" }).done(function(data) {
+          try {
+            var input = $.csv.toArrays(data);
+          }
+          catch(e) {
+            alert("CSV Parse error.");
+            return;
+          }
+          $("#events-output").pivotUI(input, {
+            rows: ["Event", "Method", "Extras"],
+            cols: ["Channel"],
+            vals: ["Count"],
+            aggregatorName: "intSum",
+            rendererName: "Heatmap",
+            renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers)
+          });
+        })
+      });
+    </script>
+    <div id="tabs">
+      <ul>
+        <li><a href="#actions-tab">Actions</a></li>
+        <li><a href="#loadurl-tab">Loading URLs</a></li>
+        <li><a href="#sharing-tab">Sharing</a></li>
+        <li><a href="#firstrun-tab">Firstrun Events</a></li>
+        <li><a href="#panels-tab">Home Panels</a></li>
+        <li><a href="#events-tab">All Events (Daily)</a></li>
+      </ul>
+      <div id="actions-tab">
+        <div id="actions-output" style="margin: 10px;"></div>
+      </div>
+      <div id="loadurl-tab">
+        <div id="loadurl-output" style="margin: 10px;"></div>
+      </div>
+      <div id="sharing-tab">
+        <div id="sharing-output" style="margin: 10px;"></div>
+      </div>
+      <div id="firstrun-tab">
+        <div id="firstrun-output" style="margin: 10px;"></div>
+      </div>
+      <div id="panels-tab">
+        <div id="panels-output" style="margin: 10px;"></div>
+      </div>
+      <div id="events-tab">
+        <div id="events-output" style="margin: 10px;"></div>
+      </div>
+    </div>
+  </body>
+</html>
