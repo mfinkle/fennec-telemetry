@@ -10,7 +10,8 @@ minDate = datetime(2013, 5, 23)
 delta = timedelta(days=2)
 
 # hold the summary so we can write it out later
-engines = {}
+basicSummary = {}
+detailSummary = {}
 
 # control the number for rows to analyze
 rows = 0
@@ -57,14 +58,29 @@ with open("search_counts.may2014") as inFile:
 
     # create a comma delimited code to make it easy to import and post-process
     # group by year-month, first-day-of-month and engine
-    code = searchDate.strftime("%Y-%m") + "-01," + engine
+    basicCode = searchDate.strftime("%Y-%m") + "-01," + engine
 
     # update the count
-    engines[code] = engines.get(code, 0) + int(count)
+    basicSummary[basicCode] = basicSummary.get(basicCode, 0) + int(count)
 
-# dump out the engine summary
-with open("engine-summary.txt", "w") as outFile:
-  keys = engines.viewkeys()
+    # group by year-month, first-day-of-month, location and engine
+    # grab the search counts
+    location = values[11]
+    detailCode = searchDate.strftime("%Y-%m") + "-01," + location + "," + engine
+
+    # update the count
+    detailSummary[detailCode] = detailSummary.get(detailCode, 0) + int(count)
+
+# dump out the basic summary
+with open("basic-summary.txt", "w") as outFile:
+  keys = basicSummary.viewkeys()
   for key in keys:
     print key
-    outFile.write(key + "," + str(engines[key]) + "\n")
+    outFile.write(key + "," + str(basicSummary[key]) + "\n")
+
+# dump out the detail summary
+with open("detail-summary.txt", "w") as outFile:
+  keys = detailSummary.viewkeys()
+  for key in keys:
+    print key
+    outFile.write(key + "," + str(detailSummary[key]) + "\n")
