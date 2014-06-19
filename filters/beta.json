@@ -11,11 +11,11 @@
     },
     {
       "field_name": "appUpdateChannel",
-      "allowed_values": ["aurora"]
+      "allowed_values": ["beta"]
     },
     {
       "field_name": "appVersion",
-      "allowed_values": "*"
+      "allowed_values": "31.0"
     },
     {
       "field_name": "appBuildID",
@@ -23,10 +23,7 @@
     },
     {
       "field_name": "submission_date",
-      "allowed_values": {
-        "min": "20140528",
-        "max": "20140604"
-      }
+      "allowed_values": "*"
     }
   ]
 }

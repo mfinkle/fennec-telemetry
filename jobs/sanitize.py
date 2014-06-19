@@ -30,20 +30,23 @@ def map(key, dimensions, value, cx):
     # This will be an array of events and sessions, specified by the 'type' key in each item.
     ui = j["UIMeasurements"]
     if len(ui) > 0:
-      homepanels = {}
+      data = {}
 
-      # Process each homepanel session, recording the total time spent in each
+      # Process each sanitize event
       for event in ui:
-        if event["type"] == "session" and "homepanel." in event["name"]:
-          add_to_homepanels(core, homepanels, event["name"])
+        if event["type"] == "event" and "sanitize." in event["action"]:
+          if "extras" in event:
+            add_to_data(core, data, event["extras"], event["method"])
+          else:
+            add_to_data(core, data, "settings", event["method"])
 
-      # Write the total time per specific panel
-      for name, value in homepanels.iteritems():
+      # Write the count for each sanitization
+      for name, value in data.iteritems():
         if value > 0:
           cx.write(name, value)
 
   except Exception, e:
-    cx.write(safe_key(["ERROR", str(e), traceback.format_exc()] + dimensions), [1,0])
+   cx.write(safe_key(["ERROR", str(e), traceback.format_exc()] + dimensions), [1,0])
 
 def setup_reduce(cx):
     cx.field_separator = ","
@@ -56,17 +59,8 @@ def reduce(key, value, cx):
     value_all = sum(value)
     cx.write(key, value_all)
 
-def add_to_homepanels(key, homepanels, name):
-  if "4becc86b-41eb-429a-a042-88fe8b5a094e" in name:
-    name = "top_sites"
-  if "7f6d419a-cd6c-4e34-b26f-f68b1b551907" in name:
-    name = "bookmarks"
-  if "20f4549a-64ad-4c32-93e4-1dcef792733b" in name:
-    name = "reading_list"
-  if "f134bf20-11f7-4867-ab8b-e8e705d7fbe8" in name:
-    name = "history"
-
-  identifier = key + "," + name
-  if not identifier in homepanels:
-    homepanels[identifier] = 0
-  homepanels[identifier] += 1
+def add_to_data(key, data, action, method):
+  identifer = key + "," + action + "," + method
+  if not identifer in data:
+    data[identifer] = 0
+  data[identifer] += 1

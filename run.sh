@@ -1,11 +1,16 @@
 DEFAULT_NUM_MAPPERS=16
 DEFAULT_NUM_REDUCERS=4
 
+TODAY=$(date +%Y%m%d)
+
 function setup_directories {
-  if [ ! -e '/mnt/telemetry' ]; then
-    sudo mkdir /mnt/telemetry
-    sudo chown ubuntu:ubuntu /mnt/telemetry
-    mkdir /mnt/telemetry/work
+  if [ ! -d "/mnt/telemetry" ]; then
+    sudo mkdir "/mnt/telemetry"
+    sudo chown ubuntu:ubuntu "/mnt/telemetry"
+  fi
+
+  if [ ! -d "/mnt/telemetry/work" ]; then
+    mkdir -p "/mnt/telemetry/work"
   fi
 }
 
@@ -17,6 +22,7 @@ function show_usage {
   printf "\t -f,  filter name\n"
   printf "\t -m,  number of mappers (defaults to $DEFAULT_NUM_MAPPERS)\n"
   printf "\t -r,  number of reducers (defaults to $DEFAULT_NUM_REDUCERS)\n"
+  printf "\t -d,  target submission date (defaults to yesterday)\n"
   printf "\t -p,  force to redownload data from S3 (takes longer)\n"
   printf "\t -s,  show the command to be run, without actually running\n"
   exit 1
@@ -25,8 +31,9 @@ function show_usage {
 function set_defaults {
   NUM_MAPPERS=$DEFAULT_NUM_MAPPERS
   NUM_REDUCERS=$DEFAULT_NUM_REDUCERS
+  TARGET_DATE=$(date -d 'yesterday' +%Y%m%d)
 
-  if [ -d "/mnt/telemetry/cache/saved_session" ]; then
+  if [ -d "/mnt/telemetry/work/cache/saved_session" ]; then
     PULL="--local-only"
   else
     PULL=""
@@ -57,6 +64,10 @@ function set_parameters {
         NUM_REDUCERS=$2
         shift 2
         ;;
+      -d)
+        TARGET_DATE=$2
+        shift 2
+        ;;
       -p)
         PULL=""
         shift
@@ -77,7 +88,11 @@ function set_parameters {
     show_usage
   fi
 
-  OUTPUT_FILE="/mnt/telemetry/"$JOB_NAME"_"$FILTER_NAME"_results.out"
+  OUTPUT_FILE="/mnt/telemetry/"$JOB_NAME"_"$FILTER_NAME"_results.txt"
+
+  echo "Today is $TODAY, and we're using data from $TARGET_DATE"
+  sed -i.bak "s/__TARGET_DATE__/$TARGET_DATE/" ./fennec-telemetry/filters/$FILTER_NAME.json
+
 
   echo "JOB_NAME = $JOB_NAME"
   echo "FILTER_NAME = $FILTER_NAME"
@@ -91,7 +106,7 @@ function run_job {
     --input-filter ../fennec-telemetry/filters/$FILTER_NAME.json \
     --num-mappers $NUM_MAPPERS \
     --num-reducers $NUM_REDUCERS \
-    --data-dir /mnt/telemetry/work \
+    --data-dir /mnt/telemetry/work/cache \
     --work-dir /mnt/telemetry/work \
     --output $OUTPUT_FILE \
     --bucket \"telemetry-published-v1\" \
