@@ -9,8 +9,8 @@ function setup_directories {
     sudo chown ubuntu:ubuntu "/mnt/telemetry"
   fi
 
-  if [ ! -d "/mnt/telemetry/work" ]; then
-    mkdir -p "/mnt/telemetry/work"
+  if [ ! -d "/mnt/telemetry/work/cache" ]; then
+    mkdir -p "/mnt/telemetry/work/cache"
   fi
 }
 
