@@ -57,7 +57,7 @@ def reduce(key, value, cx):
     cx.write(key, value_all)
 
 def add_to_actions(key, actions, action, method):
-  identifer = key + "," + action + "," + str(method)
+  identifer = key + "," + str(action) + "," + str(method)
   if not identifer in actions:
     actions[identifer] = 0
   actions[identifer] += 1

@@ -30,15 +30,17 @@ def map(key, dimensions, value, cx):
     # This will be an array of events and sessions, specified by the 'type' key in each item.
     ui = j["UIMeasurements"]
     if len(ui) > 0:
-      methods = {}
+      events = {}
 
-      # Process each load URL event
+      # Process each event with a firstrun session
       for event in ui:
-        if event["type"] == "event" and "loadurl." in event["action"]:
-          add_to_methods(core, methods, event["method"])
+        if event["type"] == "event":
+          for session in event["sessions"]:
+            if "firstrun." in session:
+              add_to_events(core, events, event)
 
-      # Write the count for each loadurl method
-      for name, value in methods.iteritems():
+      # Write the total time per specific panel
+      for name, value in events.iteritems():
         if value > 0:
           cx.write(name, value)
 
@@ -56,10 +58,14 @@ def reduce(key, value, cx):
     value_all = sum(value)
     cx.write(key, value_all)
 
-def add_to_methods(key, methods, method):
-  if not method:
-    method = "<empty>"
-  identifer = key + "," + method
-  if not identifer in methods:
-    methods[identifer] = 0
-  methods[identifer] += 1
+def add_to_events(key, events, event):
+  method = "<none>"
+  if event["method"]:
+    method = event["method"]
+  extras = ""
+  if "extras" in event and event["extras"]:
+    extras = event["extras"]
+  identifier = key + "," + str(event["action"]) + "," + str(method) + "," + extras
+  if not identifier in events:
+    events[identifier] = 0
+  events[identifier] += 1

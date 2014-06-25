@@ -30,15 +30,18 @@ def map(key, dimensions, value, cx):
     # This will be an array of events and sessions, specified by the 'type' key in each item.
     ui = j["UIMeasurements"]
     if len(ui) > 0:
-      actions = {}
+      loadurls = {}
 
-      # Process each action event
+      # Process each load URL event
       for event in ui:
-        if event["type"] == "event" and "action." in event["action"]:
-          add_to_actions(core, actions, event["extras"], event["method"], concat_sessions(event["sessions"]))
+        if event["type"] == "event" and "loadurl." in event["action"]:
+          extras = ""
+          if "extras" in event and event["extras"]:
+            extras = event["extras"]
+          add_to_loadurls(core, loadurls, event["method"], concat_sessions(event["sessions"]), extras)
 
-      # Write the count for each action
-      for name, value in actions.iteritems():
+      # Write the count for each loadurl situation
+      for name, value in loadurls.iteritems():
         if value > 0:
           cx.write(name, value)
 
@@ -78,8 +81,10 @@ def concat_sessions(sessions):
     listing += sanitize_session(session)
   return listing
 
-def add_to_actions(key, actions, action, method, sessions):
-  identifer = key + "," + action + "," + str(method) + "," + sessions
-  if not identifer in actions:
-    actions[identifer] = 0
-  actions[identifer] += 1
+def add_to_loadurls(key, loadurls, method, sessions, extras):
+  if not method:
+    method = ""
+  identifer = key + "," + method + "," + sessions + "," + extras
+  if not identifer in loadurls:
+    loadurls[identifer] = 0
+  loadurls[identifer] += 1

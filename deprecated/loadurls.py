@@ -30,15 +30,18 @@ def map(key, dimensions, value, cx):
     # This will be an array of events and sessions, specified by the 'type' key in each item.
     ui = j["UIMeasurements"]
     if len(ui) > 0:
-      loadurls = {}
+      methods = {}
 
       # Process each load URL event
       for event in ui:
         if event["type"] == "event" and "loadurl." in event["action"]:
-          add_to_loadurls(core, loadurls, event["method"], concat_sessions(event["sessions"]))
+          extras = ""
+          if "extras" in event and event["extras"]:
+            extras = event["extras"]
+          add_to_methods(core, methods, event["method"], extras)
 
-      # Write the count for each loadurl situation
-      for name, value in loadurls.iteritems():
+      # Write the count for each loadurl method
+      for name, value in methods.iteritems():
         if value > 0:
           cx.write(name, value)
 
@@ -56,30 +59,10 @@ def reduce(key, value, cx):
     value_all = sum(value)
     cx.write(key, value_all)
 
-def sanitize_session(session):
-  if "4becc86b-41eb-429a-a042-88fe8b5a094e" in session:
-    return "top_sites"
-  if "7f6d419a-cd6c-4e34-b26f-f68b1b551907" in session:
-    return "bookmarks"
-  if "20f4549a-64ad-4c32-93e4-1dcef792733b" in session:
-    return "reading_list"
-  if "f134bf20-11f7-4867-ab8b-e8e705d7fbe8" in session:
-    return "history"
-  return session
-
-def concat_sessions(sessions):
-  listing = ""
-  for session in sessions:
-    # Skip the "home" wrapper session
-    if "home." in session:
-      continue
-    if listing != "":
-      listing += " > "
-    listing += sanitize_session(session)
-  return listing
-
-def add_to_loadurls(key, loadurls, method, sessions):
-  identifer = key + "," + method + "," + sessions
-  if not identifer in loadurls:
-    loadurls[identifer] = 0
-  loadurls[identifer] += 1
+def add_to_methods(key, methods, method, extras):
+  if not method:
+    method = ""
+  identifer = key + "," + method + "," + extras
+  if not identifer in methods:
+    methods[identifer] = 0
+  methods[identifer] += 1
