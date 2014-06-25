@@ -31,106 +31,86 @@
       $(document).ready(function() {
         $("#tabs").tabs();
 
-        $.ajax({ url: "data/actions.csv", dataType: "text" }).done(function(data) {
-          try {
-            var input = $.csv.toArrays(data);
-          }
-          catch(e) {
-            alert("CSV Parse error.");
-            return;
-          }
-          $("#actions-output").pivotUI(input, {
-            rows: ["Action"],
-            cols: ["Method"],
-            vals: ["Count"],
-            aggregatorName: "intSum",
-            rendererName: "Heatmap",
-            renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers)
-          });
-        })
-
-        $.ajax({ url: "data/loadurls.csv", dataType: "text" }).done(function(data) {
-          try {
-            var input = $.csv.toArrays(data);
-          }
-          catch(e) {
-            alert("CSV Parse error.");
-            return;
-          }
-          $("#loadurl-output").pivotUI(input, {
-            rows: ["Method"],
-            cols: [],
-            vals: ["Count"],
-            aggregatorName: "intSum",
-            rendererName: "Heatmap",
-            renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers)
-          });
-        })
-
-        $.ajax({ url: "data/sharing.csv", dataType: "text" }).done(function(data) {
-          try {
-            var input = $.csv.toArrays(data);
-          }
-          catch(e) {
-            alert("CSV Parse error.");
-            return;
-          }
-          $("#sharing-output").pivotUI(input, {
-            rows: ["Method"],
-            cols: [],
-            vals: ["Count"],
-            aggregatorName: "intSum",
-            rendererName: "Heatmap",
-            renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers)
-          });
-        })
-
-        $.ajax({ url: "data/firstrun.csv", dataType: "text" }).done(function(data) {
-          try {
-            var input = $.csv.toArrays(data);
-          }
-          catch(e) {
-            alert("CSV Parse error.");
-            return;
-          }
-          $("#firstrun-output").pivotUI(input, {
-            rows: ["Event"],
-            cols: [],
-            vals: ["Count"],
-            aggregatorName: "intSum",
-            rendererName: "Heatmap",
-            renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers)
-          });
-        })
-
-        $.ajax({ url: "data/homepanels.csv", dataType: "text" }).done(function(data) {
-          try {
-            var input = $.csv.toArrays(data);
-          }
-          catch(e) {
-            alert("CSV Parse error.");
-            return;
-          }
-          $("#panels-output").pivotUI(input, {
-            rows: ["Panel"],
-            cols: [],
-            vals: ["Count"],
-            aggregatorName: "intSum",
-            rendererName: "Heatmap",
-            renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers)
-          });
-        })
-
         $.ajax({ url: "data/events.csv", dataType: "text" }).done(function(data) {
           try {
-            var input = $.csv.toArrays(data);
+            var input = $.csv.toObjects(data);
           }
           catch(e) {
             alert("CSV Parse error.");
             return;
           }
+
+          var testing = $("#actions-output").pivotUI(input, {
+            rows: ["Method", "Extras"],
+            cols: ["Channel"],
+            vals: ["Count"],
+            exclusions: { "Event": ["cancel.1", "launch.1", "loadurl.1", "policynotification.success.1:true", "policynotification.success.1:false", "sanitize.1", "save.1", "setdefault.1", "share.1", "undo.1", "unsave.1"] },
+            aggregatorName: "intSum",
+            rendererName: "Heatmap",
+            renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers)
+          });
+
+          $("#loadurl-output").pivotUI(input, {
+            rows: ["Method", "Extras"],
+            cols: ["Channel"],
+            vals: ["Count"],
+            exclusions: { "Event": ["action.1", "cancel.1", "launch.1", "policynotification.success.1:true", "policynotification.success.1:false", "sanitize.1", "save.1", "setdefault.1", "share.1", "undo.1", "unsave.1"] },
+            aggregatorName: "intSum",
+            rendererName: "Heatmap",
+            renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers)
+          });
+
+          $("#sharing-output").pivotUI(input, {
+            rows: ["Method"],
+            cols: ["Channel"],
+            vals: ["Count"],
+            exclusions: { "Event": ["action.1", "cancel.1", "launch.1", "loadurl.1", "policynotification.success.1:true", "policynotification.success.1:false", "sanitize.1", "save.1", "setdefault.1", "undo.1", "unsave.1"] },
+            aggregatorName: "intSum",
+            rendererName: "Heatmap",
+            renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers)
+          });
+
+          $("#firstrun-output").pivotUI(input, {
+            rows: ["Event", "Method", "Extras"],
+            cols: ["Channel"],
+            vals: ["Count"],
+            exclusions: { "Firstrun": ["0"] },
+            aggregatorName: "intSum",
+            rendererName: "Heatmap",
+            renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers)
+          });
+
           $("#events-output").pivotUI(input, {
             rows: ["Event", "Method", "Extras"],
+            cols: ["Channel"],
+            vals: ["Count"],
+            aggregatorName: "intSum",
+            rendererName: "Heatmap",
+            renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers)
+          });
+        })
+
+        $.ajax({ url: "data/sessions.csv", dataType: "text" }).done(function(data) {
+          try {
+            var input = $.csv.toObjects(data);
+          }
+          catch(e) {
+            alert("CSV Parse error.");
+            return;
+          }
+
+          $("#panels-output").pivotUI(input, {
+            rows: ["Session"],
+            cols: ["Channel"],
+            vals: ["Count"],
+            exclusions: { "Session": ["awesomescreen.1", "frecency.1", "frecency.1:", "home.1", "reader.1", "urlbar.1", "urlbar.1:"] },
+            aggregatorName: "intSum",
+            rendererName: "Heatmap",
+            renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers)
+          });
+
+          $("#sessions-output").pivotUI(input, {
+            rows: ["Session"],
             cols: ["Channel"],
             vals: ["Count"],
             aggregatorName: "intSum",
@@ -147,25 +127,57 @@
         <li><a href="#sharing-tab">Sharing</a></li>
         <li><a href="#firstrun-tab">Firstrun Events</a></li>
         <li><a href="#panels-tab">Home Panels</a></li>
-        <li><a href="#events-tab">All Events (Daily)</a></li>
+        <li><a href="#events-tab">Events (Daily)</a></li>
+        <li><a href="#sessions-tab">Sessions (Daily)</a></li>
+        <li><a href="#activity-tab">Activity (Daily)</a></li>
+        <li><a href="#glossary-tab">Glossary</a></li>
       </ul>
       <div id="actions-tab">
+        <div class="header">Explore the most commonly used actions on the main menu, context menus, pageactions, buttons and toolbars in the application.</div>
         <div id="actions-output" style="margin: 10px;"></div>
       </div>
       <div id="loadurl-tab">
+        <div class="header">Explore the ways in which URLs are loaded into the application, from within the UI and including external intents.</div>
         <div id="loadurl-output" style="margin: 10px;"></div>
       </div>
       <div id="sharing-tab">
+        <div class="header">Explore how data is shared from within the application to external applications.</div>
         <div id="sharing-output" style="margin: 10px;"></div>
       </div>
       <div id="firstrun-tab">
+        <div class="header">Explore the types of events triggered during the very first time someone uses the application.</div>
         <div id="firstrun-output" style="margin: 10px;"></div>
       </div>
       <div id="panels-tab">
+        <div class="header">See which home panels are viewed most often.</div>
         <div id="panels-output" style="margin: 10px;"></div>
       </div>
       <div id="events-tab">
+        <div class="header">Explore and dig deeper into the raw stream of events captured while the applications is being used.</div>
         <div id="events-output" style="margin: 10px;"></div>
+      </div>
+      <div id="sessions-tab">
+        <div class="header">Explore and dig deeper into the raw stream of sessions captured while the applications is being used.</div>
+        <div id="sessions-output" style="margin: 10px;"></div>
+      </div>
+      <div id="activity-tab">
+        <div class="header">Explore the initial sequence of events in a session. Up to the first five (5) events are processed. Mouse over the chart.</div>
+        <iframe src="sequences.html" marginwidth="0" marginheight="0" scrolling="no" width="900"></iframe>
+      </div>
+      <div id="glossary-tab">
+        <div class="header">What do some of these terms mean?</div>
+        <div "glossary-list">
+          <ul>
+            <li><b>Date:</b> The date of the telemetry data submission.</li>
+            <li><b>Version:</b> Version number of the application that submitted the telemetry data.</li>
+            <li><b>Channel:</b> Channel (nightly, aurora or beta) of the application that submitted the telemetry data.</li>
+            <li><b>BuildID:</b> Unique build identifier of the application that submitted the telemetry data. Some channels (nightly and aurora) update build IDs every day, while others (beta) only update once a week.</li>
+            <li><b>Event:</b> A telemetry probe triggered when the users takes an action. Examples include tapping a menu, loading a URL, sharing content or saving content for later.</li>
+            <li><b>Session:</b> A telemetry probe triggered when the application starts a short-lived scope or situation. Examples include showing a Home panel, opening the awesomebar or starting a reading viewer. Each Event is stamped with zero or more Sessions that were active when the Event was triggered.</li>
+            <li><b>Method:</b> How an Event was triggered. Examples include tapping a menu or contextmenu or actionbar item, tapping a griditem (thumbnail) on a home panel, or even externally via another application or from the Android homescreen.</li>
+            <li><b>Extras:</b> Additional information sent along with an Event to help give more context. The Extra is really dependent on the type of Event. For example, "action" Events send the name of the action (typically the menu ID) in the Extras field.</li>
+            <li><b>Firstrun:</b> A boolean (0 or 1) used to indicate if the Event was triggered during the very first run after the application profile has been created.</li>
+            <li><b>Tablet:</b> A boolean (0 or 1) used to indicate if the telemetry data was collected on a tablet (large screen) device or not.</li>
       </div>
     </div>
   </body>
