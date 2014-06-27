@@ -88,8 +88,8 @@ def add_to_events(key, events, event):
     panel = "bookmarks"
   if "20f4549a-64ad-4c32-93e4-1dcef792733b" in panel:
     panel = "reading_list"
-  if "f134bf20-11f7-4867-ab8b-e8e705d7fbe8" in panel:
-    panel = "history"
+  if "5c2601a5-eedc-4477-b297-ce4cef52adf8" in panel:
+    panel = "recent_tabs"
 
   identifier = key + "," + firstrun + "," + panel + "," + str(event["action"]) + "," + str(method) + "," + str(extras)
   if not identifier in events:
