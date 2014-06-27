@@ -93,7 +93,6 @@ function set_parameters {
   echo "Today is $TODAY, and we're using data from $TARGET_DATE"
   sed -i.bak "s/__TARGET_DATE__/$TARGET_DATE/" ./fennec-telemetry/filters/$FILTER_NAME.json
 
-
   echo "JOB_NAME = $JOB_NAME"
   echo "FILTER_NAME = $FILTER_NAME"
   echo "NUM_MAPPERS = $NUM_MAPPERS"
@@ -109,7 +108,7 @@ function run_job {
     --data-dir /mnt/telemetry/work/cache \
     --work-dir /mnt/telemetry/work \
     --output $OUTPUT_FILE \
-    --bucket \"telemetry-published-v1\" \
+    --bucket \"telemetry-published-v2\" \
     $PULL"
 
   if [ $SIMULATE ]; then

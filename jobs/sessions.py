@@ -41,9 +41,6 @@ def map(key, dimensions, value, cx):
     if len(ui) > 0:
       sessions = {}
 
-      total_count = 0
-      total_time = 0
-
       # Process each session, recording the count and duration spent in each
       for event in ui:
         if event["type"] == "session":
@@ -87,6 +84,8 @@ def add_to_sessions(key, sessions, event):
     name = "reading_list"
   if "f134bf20-11f7-4867-ab8b-e8e705d7fbe8" in name:
     name = "history"
+  if "5c2601a5-eedc-4477-b297-ce4cef52adf8" in name:
+    name = "recent_tabs"
 
   duration = (event["end"] - event["start"]) / 1000 # convert milliseconds to seconds
 
