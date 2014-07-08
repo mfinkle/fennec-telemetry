@@ -12,6 +12,7 @@
     <script type="text/javascript" src="js/pivot.js"></script>
     <script type="text/javascript" src="js/d3_renderers.js"></script>
     <script type="text/javascript" src="js/gchart_renderers.js"></script>
+    <script type="text/javascript" src="js/other_renderers.js"></script>
   </head>
   <style>
     * {font-family: Verdana;}
@@ -26,7 +27,7 @@
   </style>
   <body>
     <script type="text/javascript">
-      google.load("visualization", "1", {packages:["corechart", "charteditor"]});
+      google.load("visualization", "1", { packages:["corechart", "charteditor"] });
 
       $(document).ready(function() {
         $("#tabs").tabs();
@@ -44,17 +45,49 @@
             rows: ["Method", "Extras"],
             cols: ["Channel"],
             vals: ["Count"],
-            exclusions: { "Event": ["cancel.1", "launch.1", "loadurl.1", "policynotification.success.1:true", "policynotification.success.1:false", "sanitize.1", "save.1", "setdefault.1", "share.1", "undo.1", "unsave.1"] },
+            exclusions: { "Event":
+              [
+                "cast.1",
+                "cancel.1",
+                "edit.1",
+                "launch.1",
+                "locale.browser.reset.1", "locale.browser.selected.1", "locale.browser.unselected.1",
+                "loadurl.1",
+                "pin.1", "unpin.1",
+                "policynotification.success.1:true", "policynotification.success.1:false",
+                "sanitize.1",
+                "save.1", "unsave.1",
+                "setdefault.1",
+                "share.1",
+                "undo.1"
+              ]
+            },
             aggregatorName: "intSum",
             rendererName: "Heatmap",
-            renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers)
+            renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers, $.pivotUtilities.other_renderers)
           });
 
           $("#loadurl-output").pivotUI(input, {
             rows: ["Method", "Extras"],
             cols: ["Channel"],
             vals: ["Count"],
-            exclusions: { "Event": ["action.1", "cancel.1", "launch.1", "policynotification.success.1:true", "policynotification.success.1:false", "sanitize.1", "save.1", "setdefault.1", "share.1", "undo.1", "unsave.1"] },
+            exclusions: { "Event":
+              [
+                "action.1",
+                "cast.1",
+                "cancel.1",
+                "edit.1",
+                "launch.1",
+                "locale.browser.reset.1", "locale.browser.selected.1", "locale.browser.unselected.1",
+                "pin.1", "unpin.1",
+                "policynotification.success.1:true", "policynotification.success.1:false",
+                "sanitize.1",
+                "save.1", "unsave.1",
+                "setdefault.1",
+                "share.1",
+                "undo.1"
+              ]
+            },
             aggregatorName: "intSum",
             rendererName: "Heatmap",
             renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers)
@@ -64,7 +97,23 @@
             rows: ["Method"],
             cols: ["Channel"],
             vals: ["Count"],
-            exclusions: { "Event": ["action.1", "cancel.1", "launch.1", "loadurl.1", "policynotification.success.1:true", "policynotification.success.1:false", "sanitize.1", "save.1", "setdefault.1", "undo.1", "unsave.1"] },
+            exclusions: { "Event":
+              [
+                "action.1",
+                "cast.1",
+                "cancel.1",
+                "edit.1",
+                "launch.1",
+                "loadurl.1",
+                "locale.browser.reset.1", "locale.browser.selected.1", "locale.browser.unselected.1",
+                "pin.1", "unpin.1",
+                "policynotification.success.1:true", "policynotification.success.1:false",
+                "sanitize.1",
+                "save.1", "unsave.1",
+                "setdefault.1",
+                "undo.1"
+              ]
+            },
             aggregatorName: "intSum",
             rendererName: "Heatmap",
             renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers)
