@@ -43,7 +43,7 @@ function set_defaults {
 function set_parameters {
   set_defaults
 
-  TEMP=`getopt j:f:m::r::phs $@`
+  TEMP=`getopt j:f:d:m::r::phsx $@`
   eval set -- "$TEMP"
 
   while true ; do
@@ -79,6 +79,10 @@ function set_parameters {
         SIMULATE=true
         shift
         ;;
+      -x)
+        HEADER_NAME=$JOB_NAME
+        shift
+        ;;
       --) shift ; break ;;
       *) echo "Internal error: $1" ; exit 1 ;;
     esac
@@ -88,13 +92,14 @@ function set_parameters {
     show_usage
   fi
 
-  OUTPUT_FILE="/mnt/telemetry/"$JOB_NAME"_"$FILTER_NAME"_results.txt"
+  OUTPUT_FILE="/mnt/telemetry/"$JOB_NAME"_"$FILTER_NAME".txt"
 
   echo "Today is $TODAY, and we're using data from $TARGET_DATE"
   sed -i.bak "s/__TARGET_DATE__/$TARGET_DATE/" ./fennec-telemetry/filters/$FILTER_NAME.json
 
   echo "JOB_NAME = $JOB_NAME"
   echo "FILTER_NAME = $FILTER_NAME"
+  echo "HEADER_NAME = $HEADER_NAME"
   echo "NUM_MAPPERS = $NUM_MAPPERS"
   echo "NUM_REDUCERS = $NUM_REDUCERS"
   echo "PULL = $PULL"
@@ -121,6 +126,10 @@ function run_job {
     eval $COMMAND
     printf "\n------> Results in $OUTPUT_FILE\n"
     cat $OUTPUT_FILE
+    if [ $HEADER_NAME ]; then
+      cp ../fennec-telemetry/headers/$HEADER_NAME.txt /mnt/telemetry/$JOB_NAME.csv
+      cat $OUTPUT_FILE >> /mnt/telemetry/$JOB_NAME.csv
+    fi
   fi
 }
 
