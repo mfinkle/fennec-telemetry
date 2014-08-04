@@ -24,6 +24,9 @@
       position: absolute;
       text-indent: 2px;
     }
+    #footer {
+      font-size: 10px;
+    }
   </style>
   <body>
     <script type="text/javascript">
@@ -62,7 +65,7 @@
                 "undo.1"
               ]
             },
-            aggregatorName: "intSum",
+            aggregatorName: "sumAsFractionOfCol",
             rendererName: "Heatmap",
             renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers, $.pivotUtilities.other_renderers)
           });
@@ -88,7 +91,7 @@
                 "undo.1"
               ]
             },
-            aggregatorName: "intSum",
+            aggregatorName: "sumAsFractionOfCol",
             rendererName: "Heatmap",
             renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers)
           });
@@ -228,6 +231,9 @@
             <li><b>Firstrun:</b> A boolean (0 or 1) used to indicate if the Event was triggered during the very first run after the application profile has been created.</li>
             <li><b>Tablet:</b> A boolean (0 or 1) used to indicate if the telemetry data was collected on a tablet (large screen) device or not.</li>
       </div>
+    </div>
+    <div id="footer">
+      Built using <a href="https://github.com/nicolaskruchten/pivottable">PivotTable.js</a> from Nicolas Kruchten
     </div>
   </body>
 </html>
