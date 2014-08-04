@@ -1,1 +1,1 @@
-Date,Version,Channel,BuildID,Tablet,Firstrun,Panel,Event,Method,Extras,Count
+Date,Version,Channel,BuildID,Tablet,Firstrun,Search,Panel,Event,Method,Extras,Count

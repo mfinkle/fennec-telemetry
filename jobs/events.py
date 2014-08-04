@@ -76,9 +76,12 @@ def add_to_events(key, events, event):
 
   panel = ""
   firstrun = "0"
+  search = "0"
   for session in event["sessions"]:
     if "firstrun." in session:
       firstrun = "1"
+    if "searchactivity." in session:
+      search = "1"
     if "homepanel." in session:
       panel = session
 
@@ -91,7 +94,7 @@ def add_to_events(key, events, event):
   if "5c2601a5-eedc-4477-b297-ce4cef52adf8" in panel:
     panel = "recent_tabs"
 
-  identifier = key + "," + firstrun + "," + panel + "," + str(event["action"]) + "," + str(method) + "," + str(extras)
+  identifier = key + "," + firstrun + "," + search + "," + panel + "," + str(event["action"]) + "," + str(method) + "," + str(extras)
   if not identifier in events:
     events[identifier] = 0
   events[identifier] += 1
