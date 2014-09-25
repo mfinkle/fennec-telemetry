@@ -29,7 +29,7 @@ def map(key, dimensions, value, cx):
         if info["tablet"]:
           tablet = 1
 
-    core = safe_key([submission_date, appVersion, appUpdateChannel, appBuildID, tablet])
+    core = safe_key([submission_date, appVersion, appUpdateChannel, tablet])
 
     # The structure of this json object is designated in
     # toolkit/components/telemetry/TelemetryPing.jsm#assemblePayloadWithMeasurements
