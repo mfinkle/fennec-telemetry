@@ -86,6 +86,8 @@ def add_to_sessions(key, sessions, event):
     name = "history"
   if "5c2601a5-eedc-4477-b297-ce4cef52adf8" in name:
     name = "recent_tabs"
+  if "72429afd-8d8b-43d8-9189-14b779c563d0" in panel:
+    panel = "remote_tabs"
 
   duration = (event["end"] - event["start"]) / 1000 # convert milliseconds to seconds
 

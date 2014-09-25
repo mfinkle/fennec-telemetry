@@ -93,6 +93,8 @@ def add_to_events(key, events, event):
     panel = "reading_list"
   if "5c2601a5-eedc-4477-b297-ce4cef52adf8" in panel:
     panel = "recent_tabs"
+  if "72429afd-8d8b-43d8-9189-14b779c563d0" in panel:
+    panel = "remote_tabs"
 
   identifier = key + "," + firstrun + "," + search + "," + panel + "," + str(event["action"]) + "," + str(method) + "," + str(extras)
   if not identifier in events:
