@@ -31,7 +31,8 @@ function show_usage {
 function set_defaults {
   NUM_MAPPERS=$DEFAULT_NUM_MAPPERS
   NUM_REDUCERS=$DEFAULT_NUM_REDUCERS
-  TARGET_DATE=$(date -d 'yesterday' +%Y%m%d)
+  DATE_YESTERDAY=$(date -d 'yesterday' +%Y%m%d)
+  DATE_LASTWEEK=$(date -d '7 days ago' +%Y%m%d)
 
   if [ -d "/mnt/telemetry/work/cache/saved_session" ]; then
     PULL="--local-only"
@@ -65,7 +66,7 @@ function set_parameters {
         shift 2
         ;;
       -d)
-        TARGET_DATE=$2
+        DATE_YESTERDAY=$2
         shift 2
         ;;
       -p)
@@ -94,8 +95,9 @@ function set_parameters {
 
   OUTPUT_FILE="/mnt/telemetry/"$JOB_NAME"_"$FILTER_NAME".txt"
 
-  echo "Today is $TODAY, and we're using data from $TARGET_DATE"
-  sed -i.bak "s/__TARGET_DATE__/$TARGET_DATE/" ./fennec-telemetry/filters/$FILTER_NAME.json
+  echo "Today is $TODAY, and we're using data from $DATE_YESTERDAY"
+  sed -i.bak "s/__TARGET_DATE__/$DATE_YESTERDAY/" ./fennec-telemetry/filters/$FILTER_NAME.json
+  sed -i.bak "s/__TARGET_END__/$DATE_LASTWEEK/" ./fennec-telemetry/filters/$FILTER_NAME.json
 
   echo "JOB_NAME = $JOB_NAME"
   echo "FILTER_NAME = $FILTER_NAME"
