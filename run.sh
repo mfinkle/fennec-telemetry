@@ -96,8 +96,8 @@ function set_parameters {
   OUTPUT_FILE="/mnt/telemetry/"$JOB_NAME"_"$FILTER_NAME".txt"
 
   echo "Today is $TODAY, and we're using data from $DATE_YESTERDAY"
-  sed -i.bak "s/__TARGET_DATE__/$DATE_YESTERDAY/" ./fennec-telemetry/filters/$FILTER_NAME.json
-  sed -i.bak "s/__TARGET_END__/$DATE_LASTWEEK/" ./fennec-telemetry/filters/$FILTER_NAME.json
+  sed -i.bak "s/__TARGET_DATE__/$DATE_YESTERDAY/" ~/fennec-telemetry/filters/$FILTER_NAME.json
+  sed -i.bak "s/__TARGET_END__/$DATE_LASTWEEK/" ~/fennec-telemetry/filters/$FILTER_NAME.json
 
   echo "JOB_NAME = $JOB_NAME"
   echo "FILTER_NAME = $FILTER_NAME"
