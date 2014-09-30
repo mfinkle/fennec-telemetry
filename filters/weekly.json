@@ -24,8 +24,8 @@
     {
       "field_name": "submission_date",
       "allowed_values": {
-        "min": "__TARGET_DATE__",
-        "max": "__TARGET_END__"
+        "min": "__TARGET_END__",
+        "max": "__TARGET_DATE__"
       }
     }
   ]
