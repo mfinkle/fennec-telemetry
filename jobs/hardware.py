@@ -44,7 +44,7 @@ def map(key, dimensions, value, cx):
       if "device" in info:
         device = info["device"]
 
-    core = safe_key([submission_date, appVersion, appUpdateChannel, appBuildID, tablet, version, arch, memsize, device])
+    core = safe_key([submission_date, appVersion, appUpdateChannel, tablet, version, arch, memsize, device])
 
     cx.write(core, 1)
 
@@ -55,9 +55,6 @@ def setup_reduce(cx):
     cx.field_separator = ","
 
 def reduce(key, value, cx):
-  if key.startswith("ERROR"):
-    for error in value:
-      cx.write(key, error)
-  else:
+  if key.startswith("ERROR") == False:
     value_all = sum(value)
     cx.write(key, value_all)
