@@ -84,6 +84,8 @@ def add_to_events(key, events, event):
       search = "1"
     if "homepanel." in session:
       panel = session
+    elif "reader." in session:
+      panel = "reader"
 
   # rename the built-in panels to friendly names
   if "4becc86b-41eb-429a-a042-88fe8b5a094e" in panel:
