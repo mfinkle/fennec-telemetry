@@ -57,22 +57,12 @@ def setup_reduce(cx):
     cx.field_separator = ","
 
 def reduce(key, value, cx):
-  counts = []
-  durations = []
-
   if key.startswith("ERROR"):
     for error in value:
       cx.write(key, error)
   else:
-    for session in value:
-      counts.append(session["count"])
-      if session["count"] > 0:
-        durations.append(session["duration"] / session["count"])
-      else:
-        durations.append(0)
-
-    #cx.write(",".join([key, str(sum(counts))]), str(sum(durations)))
-    cx.write(key, str(sum(counts)))
+    value_all = sum(value)
+    cx.write(key, value_all)
 
 def add_to_sessions(key, sessions, event):
   name = str(event["name"])
@@ -105,12 +95,7 @@ def add_to_sessions(key, sessions, event):
   elif "frecency.1:" in name:
     name = "frecency.1"
 
-  duration = (event["end"] - event["start"]) / 1000 # convert milliseconds to seconds
-
   identifier = key + "," + name
   if not identifier in sessions:
-    sessions[identifier] = { "duration": 0, "count": 0 }
-  session = sessions[identifier]
-  session["duration"] += duration
-  session["count"] += 1
-  sessions[identifier] = session
+    sessions[identifier] = 0
+  sessions[identifier] += 1
