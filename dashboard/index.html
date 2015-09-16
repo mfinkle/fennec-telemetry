@@ -56,6 +56,7 @@
                 "launch.1",
                 "locale.browser.reset.1", "locale.browser.selected.1", "locale.browser.unselected.1",
                 "loadurl.1",
+                "neterror.1",
                 "pin.1", "unpin.1",
                 "policynotification.success.1:true", "policynotification.success.1:false",
                 "sanitize.1",
@@ -66,6 +67,7 @@
                 "search.setdefault.1",
                 "setdefault.1",
                 "share.1",
+                "show.1",
                 "undo.1"
               ]
             },
@@ -86,6 +88,7 @@
                 "edit.1",
                 "launch.1",
                 "locale.browser.reset.1", "locale.browser.selected.1", "locale.browser.unselected.1",
+                "neterror.1",
                 "pin.1", "unpin.1",
                 "policynotification.success.1:true", "policynotification.success.1:false",
                 "sanitize.1",
@@ -96,6 +99,7 @@
                 "search.setdefault.1",
                 "setdefault.1",
                 "share.1",
+                "show.1",
                 "undo.1"
               ]
             },
@@ -117,6 +121,7 @@
                 "launch.1",
                 "loadurl.1",
                 "locale.browser.reset.1", "locale.browser.selected.1", "locale.browser.unselected.1",
+                "neterror.1",
                 "pin.1", "unpin.1",
                 "policynotification.success.1:true", "policynotification.success.1:false",
                 "sanitize.1",
@@ -126,6 +131,7 @@
                 "search.restoredefaults.1",
                 "search.setdefault.1",
                 "setdefault.1",
+                "show.1",
                 "undo.1"
               ]
             },
@@ -167,7 +173,7 @@
             rows: ["Session"],
             cols: ["Channel"],
             vals: ["Count"],
-            exclusions: { "Session": ["awesomescreen.1", "frecency.1", "frecency.1:", "home.1", "reader.1", "urlbar.1", "urlbar.1:"] },
+            exclusions: { "Session": ["awesomescreen.1", "frecency.1", "frecency.1:", "home.1", "reader.1", "searchactivity.1", "settings.1", "urlbar.1", "urlbar.1:"] },
             aggregatorName: "intSum",
             rendererName: "Heatmap",
             renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers)
@@ -191,9 +197,8 @@
         <li><a href="#sharing-tab">Sharing</a></li>
         <li><a href="#firstrun-tab">Firstrun Events</a></li>
         <li><a href="#panels-tab">Home Panels</a></li>
-        <li><a href="#events-tab">Events (Daily)</a></li>
-        <li><a href="#sessions-tab">Sessions (Daily)</a></li>
-        <li><a href="#activity-tab">Activity (Daily)</a></li>
+        <li><a href="#events-tab">Events (Weekly)</a></li>
+        <li><a href="#sessions-tab">Sessions (Weekly)</a></li>
         <li><a href="#glossary-tab">Glossary</a></li>
       </ul>
       <div id="actions-tab">
