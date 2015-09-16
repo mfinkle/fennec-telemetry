@@ -140,6 +140,41 @@
             renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers)
           });
 
+          $("#setting-output").pivotUI(input, {
+            rows: ["Method", "Extras"],
+            cols: ["Channel"],
+            vals: ["Count"],
+            exclusions: {
+              "Event": [
+                "action.1",
+                "cast.1",
+                "cancel.1",
+                "launch.1",
+                "loadurl.1",
+                "locale.browser.reset.1", "locale.browser.selected.1", "locale.browser.unselected.1",
+                "neterror.1",
+                "pin.1", "unpin.1",
+                "policynotification.success.1:true", "policynotification.success.1:false",
+                "sanitize.1",
+                "save.1", "unsave.1",
+                "search.1",
+                "search.remove.1",
+                "search.restoredefaults.1",
+                "search.setdefault.1",
+                "setdefault.1",
+                "share.1",
+                "show.1",
+                "undo.1"
+              ],
+              "Method": [
+                ""
+              ]
+            },
+            aggregatorName: "sumAsFractionOfCol",
+            rendererName: "Heatmap",
+            renderers: $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers, $.pivotUtilities.gchart_renderers)
+          });
+
           $("#firstrun-output").pivotUI(input, {
             rows: ["Event", "Method", "Extras"],
             cols: ["Channel"],
@@ -195,6 +230,7 @@
         <li><a href="#actions-tab">Actions</a></li>
         <li><a href="#loadurl-tab">Loading URLs</a></li>
         <li><a href="#sharing-tab">Sharing</a></li>
+        <li><a href="#setting-tab">Settings</a></li>
         <li><a href="#firstrun-tab">Firstrun Events</a></li>
         <li><a href="#panels-tab">Home Panels</a></li>
         <li><a href="#events-tab">Events (Weekly)</a></li>
@@ -213,6 +249,10 @@
         <div class="header">Explore how data is shared from within the application to external applications.</div>
         <div id="sharing-output" style="margin: 10px;"></div>
       </div>
+      <div id="setting-tab">
+        <div class="header">Explore which settings are most used in the application.</div>
+        <div id="setting-output" style="margin: 10px;"></div>
+      </div>
       <div id="firstrun-tab">
         <div class="header">Explore the types of events triggered during the very first time someone uses the application.</div>
         <div id="firstrun-output" style="margin: 10px;"></div>
@@ -229,10 +269,6 @@
         <div class="header">Explore and dig deeper into the raw stream of sessions captured while the applications is being used.</div>
         <div id="sessions-output" style="margin: 10px;"></div>
       </div>
-      <div id="activity-tab">
-        <div class="header">Explore the initial sequence of events in a session. Up to the first five (5) events are processed. Mouse over the chart.</div>
-        <iframe src="sequences.html" marginwidth="0" marginheight="0" scrolling="no" width="900"></iframe>
-      </div>
       <div id="glossary-tab">
         <div class="header">What do some of these terms mean?</div>
         <div "glossary-list">
@@ -246,7 +282,8 @@
             <li><b>Method:</b> How an Event was triggered. Examples include tapping a menu or contextmenu or actionbar item, tapping a griditem (thumbnail) on a home panel, or even externally via another application or from the Android homescreen.</li>
             <li><b>Extras:</b> Additional information sent along with an Event to help give more context. The Extra is really dependent on the type of Event. For example, "action" Events send the name of the action (typically the menu ID) in the Extras field.</li>
             <li><b>Firstrun:</b> A boolean (0 or 1) used to indicate if the Event was triggered during the very first run after the application profile has been created.</li>
-            <li><b>Tablet:</b> A boolean (0 or 1) used to indicate if the telemetry data was collected on a tablet (large screen) device or not.</li>
+            <li><b>Tablet:</b> A boolean (0 or 1) used to indicate if the telemetry data was collected on a tablet (large screen) device.</li>
+            <li><b>Search:</b> A boolean (0 or 1) used to indicate if the telemetry data was collected from the Search Activity.</li>
       </div>
     </div>
     <div id="footer">
