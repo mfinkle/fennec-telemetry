@@ -80,8 +80,7 @@ def add_to_events(key, events, event):
   for session in event["sessions"]:
     if "firstrun." in session:
       firstrun = "1"
-    if "searchactivity." in session:
-      search = "1"
+
     if "homepanel." in session:
       panel = session
     elif "reader." in session:
@@ -105,7 +104,7 @@ def add_to_events(key, events, event):
   elif "homepanel.1:{" in panel:
     panel = "homepanel.1:home-feeds"
 
-  identifier = key + "," + firstrun + "," + search + "," + panel + "," + str(event["action"]) + "," + str(method) + "," + str(extras)
+  identifier = key + "," + firstrun + "," + panel + "," + str(event["action"]) + "," + str(method) + "," + str(extras)
   if not identifier in events:
     events[identifier] = 0
   events[identifier] += 1
