@@ -1,1 +1,1 @@
-Date,Version,Channel,Tablet,Firstrun,Search,Panel,Event,Method,Extras,Count
+Date,Version,Channel,Tablet,Firstrun,Panel,Event,Method,Extras,Count
