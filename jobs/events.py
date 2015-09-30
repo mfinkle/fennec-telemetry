@@ -88,17 +88,17 @@ def add_to_events(key, events, event):
 
   # rename the built-in panels to friendly names
   if "4becc86b-41eb-429a-a042-88fe8b5a094e" in panel:
-    panel = "homepanel.1:top_sites"
+    panel = "top_sites"
   elif "7f6d419a-cd6c-4e34-b26f-f68b1b551907" in panel:
-    panel = "homepanel.1:bookmarks"
+    panel = "bookmarks"
   elif "20f4549a-64ad-4c32-93e4-1dcef792733b" in panel:
-    panel = "homepanel.1:reading_list"
+    panel = "reading_list"
   elif "f134bf20-11f7-4867-ab8b-e8e705d7fbe8" in panel:
-    panel = "homepanel.1:history"
+    panel = "history"
   elif "5c2601a5-eedc-4477-b297-ce4cef52adf8" in panel:
-    panel = "homepanel.1:recent_tabs"
+    panel = "recent_tabs"
   elif "72429afd-8d8b-43d8-9189-14b779c563d0" in panel:
-    panel = "homepanel.1:remote_tabs"
+    panel = "remote_tabs"
 
   # cleanup some renamed data for add-on homepanels
   if "homepanel.1:home-feeds-" in panel:
