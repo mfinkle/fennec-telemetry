@@ -105,8 +105,6 @@ def add_to_events(key, events, event):
     panel = "homepanel.1:home-feeds"
   elif "homepanel.1:{" in panel:
     panel = "homepanel.1:home-feeds"
-  else:
-    panel = "homepanel.1:custom-panel"
 
   identifier = key + "," + firstrun + "," + panel + "," + str(event["action"]) + "," + str(method) + "," + str(extras)
   if not identifier in events:
