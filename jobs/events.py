@@ -88,23 +88,25 @@ def add_to_events(key, events, event):
 
   # rename the built-in panels to friendly names
   if "4becc86b-41eb-429a-a042-88fe8b5a094e" in panel:
-    panel = "top_sites"
+    panel = "homepanel.1:top_sites"
   elif "7f6d419a-cd6c-4e34-b26f-f68b1b551907" in panel:
-    panel = "bookmarks"
+    panel = "homepanel.1:bookmarks"
   elif "20f4549a-64ad-4c32-93e4-1dcef792733b" in panel:
-    panel = "reading_list"
+    panel = "homepanel.1:reading_list"
   elif "f134bf20-11f7-4867-ab8b-e8e705d7fbe8" in panel:
-    panel = "history"
+    panel = "homepanel.1:history"
   elif "5c2601a5-eedc-4477-b297-ce4cef52adf8" in panel:
-    panel = "recent_tabs"
+    panel = "homepanel.1:recent_tabs"
   elif "72429afd-8d8b-43d8-9189-14b779c563d0" in panel:
-    panel = "remote_tabs"
+    panel = "homepanel.1:remote_tabs"
 
-  # cleanup some renamed data
+  # cleanup some renamed data for add-on homepanels
   if "homepanel.1:home-feeds-" in panel:
     panel = "homepanel.1:home-feeds"
   elif "homepanel.1:{" in panel:
     panel = "homepanel.1:home-feeds"
+  else:
+    panel = "homepanel.1:custom-panel"
 
   identifier = key + "," + firstrun + "," + panel + "," + str(event["action"]) + "," + str(method) + "," + str(extras)
   if not identifier in events:
