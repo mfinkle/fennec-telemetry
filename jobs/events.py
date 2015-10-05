@@ -103,6 +103,26 @@ def add_to_events(key, events, event):
     panel = "homepanel.1:home-feeds"
 
   identifier = key + "," + firstrun + "," + panel + "," + str(event["action"]) + "," + str(method) + "," + str(extras)
+  # cleanup setdefault.1 data to match new format
+  if event == "setdefault.1":
+    event = "panel.setdefault.1"
+    method = "dialog"
+
+  # use friendly names for panel events
+  if "panel." in event:
+    if "4becc86b-41eb-429a-a042-88fe8b5a094e" in extras:
+      extras = "top_sites"
+    elif "7f6d419a-cd6c-4e34-b26f-f68b1b551907" in extras:
+      extras = "bookmarks"
+    elif "20f4549a-64ad-4c32-93e4-1dcef792733b" in extras:
+      extras = "reading_list"
+    elif "f134bf20-11f7-4867-ab8b-e8e705d7fbe8" in extras:
+      extras = "history"
+    elif "5c2601a5-eedc-4477-b297-ce4cef52adf8" in extras:
+      extras = "recent_tabs"
+    elif "72429afd-8d8b-43d8-9189-14b779c563d0" in extras:
+      extras = "remote_tabs"
+    
   if not identifier in events:
     events[identifier] = 0
   events[identifier] += 1
