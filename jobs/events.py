@@ -68,11 +68,11 @@ def reduce(key, value, cx):
 def add_to_events(key, events, event):
   method = ""
   if event["method"] is not None:
-    method = event["method"]
+    method = str(event["method"])
 
   extras = ""
   if "extras" in event and event["extras"] is not None:
-    extras = event["extras"]
+    extras = str(event["extras"])
 
   panel = ""
   firstrun = "0"
@@ -102,7 +102,6 @@ def add_to_events(key, events, event):
   elif "homepanel.1:{" in panel:
     panel = "homepanel.1:home-feeds"
 
-  identifier = key + "," + firstrun + "," + panel + "," + str(event["action"]) + "," + str(method) + "," + str(extras)
   # cleanup setdefault.1 data to match new format
   if event == "setdefault.1":
     event = "panel.setdefault.1"
@@ -123,6 +122,7 @@ def add_to_events(key, events, event):
     elif "72429afd-8d8b-43d8-9189-14b779c563d0" in extras:
       extras = "remote_tabs"
     
+  identifier = "%,%,%,%,%,%" % (key, firstrun, panel, str(event["action"]), method, extras)
   if not identifier in events:
     events[identifier] = 0
   events[identifier] += 1

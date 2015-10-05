@@ -95,7 +95,7 @@ def add_to_sessions(key, sessions, event):
   elif "frecency.1:" in name:
     name = "frecency.1"
 
-  identifier = key + "," + name
+  identifier = "%,%" % (key, name)
   if not identifier in sessions:
     sessions[identifier] = 0
   sessions[identifier] += 1
