@@ -122,7 +122,7 @@ def add_to_events(key, events, event):
     elif "72429afd-8d8b-43d8-9189-14b779c563d0" in extras:
       extras = "remote_tabs"
     
-  identifier = "%,%,%,%,%,%" % (key, firstrun, panel, str(event["action"]), method, extras)
+  identifier = "{0},{1},{2},{3},{4},{5}".format(key, firstrun, panel, str(event["action"]), method, extras)
   if not identifier in events:
     events[identifier] = 0
   events[identifier] += 1

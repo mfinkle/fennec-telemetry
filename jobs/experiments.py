@@ -76,7 +76,7 @@ def add_to_events(key, events, event):
 
   for session in event["sessions"]:
     if "experiment." in session:
-      identifier = "%,%,%,%,%" % (key, session, str(event["action"]), method, extras)
+      identifier = "{0},{1},{2},{3},{4}".format(key, session, str(event["action"]), method, extras)
       if not identifier in events:
         events[identifier] = 0
       events[identifier] += 1
