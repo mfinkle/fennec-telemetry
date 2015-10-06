@@ -68,15 +68,15 @@ def reduce(key, value, cx):
 def add_to_events(key, events, event):
   method = ""
   if event["method"] is not None:
-    method = event["method"]
+    method = str(event["method"])
 
   extras = ""
   if "extras" in event and event["extras"] is not None:
-    extras = event["extras"]
+    extras = str(event["extras"])
 
   for session in event["sessions"]:
     if "experiment." in session:
-      identifier = key + "," + session + "," + str(event["action"]) + "," + str(method) + "," + str(extras)
+      identifier = "%,%,%,%,%" % (key, session, str(event["action"]), method, extras)
       if not identifier in events:
         events[identifier] = 0
       events[identifier] += 1
