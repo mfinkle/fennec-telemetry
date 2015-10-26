@@ -77,6 +77,17 @@ def add_to_events(key, events, event):
   extras = ""
   if "extras" in event and event["extras"] is not None:
     extras = str(event["extras"])
+    # Anonymize some private tab actions
+    if action == "action.1":
+      if extras == "new_private_tab":
+        extras = "new_tab"
+      elif extras == "home_open_private_tab":
+        extras = "home_open_new_tab"
+      elif extras == "web_open_private_tab":
+        extras = "web_open_new_tab"
+      elif extras == "close_private_tabs":
+        extras = "close_all_tabs"
+
 
   panel = ""
   firstrun = "0"
@@ -86,7 +97,7 @@ def add_to_events(key, events, event):
     if "homepanel." in session:
       panel = session
 
-  # rename the built-in panels to friendly names
+  # Rename the built-in panels to friendly names
   if panel:
     if "4becc86b-41eb-429a-a042-88fe8b5a094e" in panel:
       panel = "top_sites"
@@ -101,18 +112,18 @@ def add_to_events(key, events, event):
     elif "72429afd-8d8b-43d8-9189-14b779c563d0" in panel:
       panel = "remote_tabs"
 
-  # cleanup some renamed data for add-on homepanels
+  # Cleanup some renamed data for add-on homepanels
   if "homepanel.1:home-feeds-" in panel:
     panel = "homepanel.1:home-feeds"
   elif "homepanel.1:{" in panel:
     panel = "homepanel.1:home-feeds"
 
-  # cleanup setdefault.1 data to match new format
+  # Cleanup setdefault.1 data to match new format
   if action == "setdefault.1":
     action = "panel.setdefault.1"
     method = "dialog"
 
-  # use friendly names for panel events
+  # Use friendly names for panel events
   if action.startswith("panel."):
     if "4becc86b-41eb-429a-a042-88fe8b5a094e" in extras:
       extras = "top_sites"
