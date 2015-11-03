@@ -1,1 +1,1 @@
-Date,Version,Channel,Tablet,Experiment,Event,Method,Extras,Count
+Date,Version,Channel,Locale,Tablet,Experiment,Event,Method,Extras,Count
