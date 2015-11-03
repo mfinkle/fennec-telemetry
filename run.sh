@@ -127,7 +127,6 @@ function run_job {
     cd ~/telemetry-server
     eval $COMMAND
     printf "\n------> Results in $OUTPUT_FILE\n"
-    cat $OUTPUT_FILE
     if [ $HEADER_NAME ]; then
       cp ../fennec-telemetry/headers/$HEADER_NAME.txt /mnt/telemetry/$JOB_NAME.csv
       cat $OUTPUT_FILE >> /mnt/telemetry/$JOB_NAME.csv
