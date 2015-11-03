@@ -23,13 +23,16 @@ def map(key, dimensions, value, cx):
     j = json.loads(value)
 
     tablet = 0
+    locale = "n/a"
     if "info" in j:
       info = j["info"]
       if "tablet" in info:
         if info["tablet"]:
           tablet = 1
+      if "locale" in info:
+        locale = info["locale"]
 
-    core = safe_key([submission_date, appVersion, appUpdateChannel, tablet])
+    core = safe_key([submission_date, appVersion, appUpdateChannel, locale, tablet])
 
     # The structure of this json object is designated in
     # toolkit/components/telemetry/TelemetryPing.jsm#assemblePayloadWithMeasurements
@@ -87,7 +90,6 @@ def add_to_events(key, events, event):
         extras = "web_open_new_tab"
       elif extras == "close_private_tabs":
         extras = "close_all_tabs"
-
 
   panel = ""
   firstrun = "0"
