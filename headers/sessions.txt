@@ -1,1 +1,1 @@
-Date,Version,Channel,Tablet,Session,Count
+Date,Version,Channel,Locale,Tablet,Session,Count
