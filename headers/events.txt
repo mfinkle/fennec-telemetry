@@ -1,1 +1,1 @@
-Date,Version,Channel,Locale,Tablet,Firstrun,Panel,Event,Method,Extras,Count
+Date,Version,Channel,Locale,Tablet,Firstrun,Awesomescreen,Event,Method,Extras,Count
