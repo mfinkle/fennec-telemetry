@@ -104,6 +104,21 @@ def add_to_events(key, events, event):
     action = "panel.setdefault.1"
     method = "dialog"
 
+  # Cleanup save.1 data to match new format
+  if action == "save.1":
+    if method == "button" and extras.startswith("firstrun-import-dialog-"):
+      action = "action.1"
+    elif method == "button" and extras == "reader":
+      extras = "reading_list"
+    elif method == "pageaction" and extras == "reader":
+      extras = "reading_list"
+
+  # Cleanup homescreen data to match new format
+  if action == "search.1" and method == "homescreen" and extras == "history":
+    method = "suggestion"
+  elif action == "action.1" and method == "homescreen" and extras == "hint-private-browsing":
+    method = "panel"
+
   # Use friendly names for panel events
   if action.startswith("panel."):
     if "4becc86b-41eb-429a-a042-88fe8b5a094e" in extras:
